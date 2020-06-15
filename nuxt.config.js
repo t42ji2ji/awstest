@@ -1,13 +1,20 @@
+const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
+  router: {
+    base: '/awstest/'
+  }
+} : {}
+
 export default {
   mode: 'universal',
   /*
    ** Headers of the page
    */
-  router: {
-    base: ''
-  },
+  ...routerBase,
   head: {
     title: process.env.npm_package_name || '',
+    script: [{
+      src: 'https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js'
+    }],
     meta: [{
         charset: 'utf-8'
       },
@@ -40,7 +47,10 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: [{
+    src: '~plugins/vue-infinite-scroll.js',
+    ssr: false
+  }],
   /*
    ** Nuxt.js dev-modules
    */
@@ -68,5 +78,7 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
-  }
+  },
+  serverMiddleware: ['~/api/index.js'],
+
 }
